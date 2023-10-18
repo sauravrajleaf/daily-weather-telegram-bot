@@ -6,7 +6,7 @@ const axios = require('axios');
 export class WeatherService {
   private readonly weatherApiUrl =
     'https://api.openweathermap.org/data/2.5/weather';
-  private readonly apiKey = '63f571c9180466fdc49d78045932fff9';
+  private readonly apiKey = process.env.OPEN_WEATHER_API_KEY;
 
   async getWeather(city: string): Promise<string> {
     const response = await axios.get(
