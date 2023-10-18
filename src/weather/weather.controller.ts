@@ -11,10 +11,16 @@ export class WeatherController {
 
   //this shows route
   @Post('subscribe')
-  async subscribe(@Body() { chatId, city }): Promise<void> {
-    // Save subscription to the database (not shown in this example).
-    const weather = await this.weatherService.getWeather(city);
-    const message = `Daily weather update for ${city}: ${weather}`;
-    await this.telegramService.sendMessageToUser(chatId, message);
+  async subscribe(@Body() { chatId, city }): Promise<string> {
+    try {
+      // Save subscription to the database (not shown in this example).
+      const weather = await this.weatherService.getWeather(city);
+
+      return weather;
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch weather data for ${city}. Please try again later.`,
+      );
+    }
   }
 }

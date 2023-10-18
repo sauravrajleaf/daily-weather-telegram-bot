@@ -4,15 +4,19 @@ const axios = require('axios');
 
 @Injectable()
 export class WeatherService {
-  private readonly weatherApiUrl =
-    'https://api.openweathermap.org/data/2.5/weather';
+  private readonly weatherApiUrl = process.env.OPEN_WEATHER_API_URL;
   private readonly apiKey = process.env.OPEN_WEATHER_API_KEY;
 
   async getWeather(city: string): Promise<string> {
-    const response = await axios.get(
-      `${this.weatherApiUrl}?q=${city}&appid=${this.apiKey}`,
-    );
-    // Parse the weather data and return a formatted message.
-    return response.data.weather[0].description;
+    try {
+      const response = await axios.get(
+        `${this.weatherApiUrl}?q=${city}&appid=${this.apiKey}`,
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch weather data for ${city}. Please try again later.`,
+      );
+    }
   }
 }
