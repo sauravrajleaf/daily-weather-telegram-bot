@@ -10,6 +10,7 @@ const WEATHER_API_URL = `${process.env.URL}/weather/subscribe`; // Replace with 
 const SAVE_USER_URL = `${process.env.URL}/user/save`;
 @Injectable()
 export class TelegramBotService {
+  private static instance: TelegramBotService;
   private readonly bot: any;
   // private readonly bot:TelegramBot // works after installing types
   private logger = new Logger(TelegramBotService.name);
@@ -18,19 +19,23 @@ export class TelegramBotService {
     this.bot = new TelegramBot(TELEGRAM_TOKEN, {
       polling: true,
     });
-    console.log('TelegramBotService instance created.');
+    this.logger.log('TelegramBotService instance created.');
+    this.setupEventHandlers();
+  }
 
+  static getInstance(): TelegramBotService {
+    if (!TelegramBotService.instance) {
+      TelegramBotService.instance = new TelegramBotService();
+    }
+    return TelegramBotService.instance;
+  }
+
+  private setupEventHandlers(): void {
     this.bot.onText(/\/start/, (msg) => this.onStart(msg));
     this.bot.onText(/\/subscribe (.+)/, (msg, match) =>
       this.onSubscribe(msg, match),
     );
-
-    // this.bot.on('message', this.onReceiveMessage);
-
-    // this.sendMessageToUser(
-    //   process.env.TEST_CHAT_ID,
-    //   `Server started at ${new Date()}`,
-    // );
+    // Add more event handlers as needed
   }
 
   onStart(msg: any) {

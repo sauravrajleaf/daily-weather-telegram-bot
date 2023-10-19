@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TelegramBotModule } from './telegram-bot/telegram-bot.module';
 import { WeatherService } from './weather/weather.service';
