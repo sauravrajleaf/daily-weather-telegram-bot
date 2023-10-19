@@ -6,10 +6,17 @@ import { WeatherModule } from './weather/weather.module';
 import { WeatherController } from './weather/weather.controller';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
-
+import { SchedulerService } from './scheduler/scheduler.service';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
-  imports: [TelegramBotModule, WeatherModule, DatabaseModule, UserModule],
+  imports: [
+    ScheduleModule.forRoot(),
+    TelegramBotModule,
+    WeatherModule,
+    DatabaseModule,
+    UserModule,
+  ],
   controllers: [WeatherController],
-  providers: [AppService, WeatherService],
+  providers: [AppService, WeatherService, SchedulerService],
 })
 export class AppModule {}
