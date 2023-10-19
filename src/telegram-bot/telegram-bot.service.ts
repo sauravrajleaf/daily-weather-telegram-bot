@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { WeatherService } from 'src/weather/weather.service';
 
 const TelegramBot = require('node-telegram-bot-api');
 
@@ -8,11 +7,10 @@ const axios = require('axios');
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const WEATHER_API_URL = `${process.env.URL}/weather/subscribe`; // Replace with your API endpoint
-
+const SAVE_USER_URL = `${process.env.URL}/user/save`;
 @Injectable()
 export class TelegramBotService {
   private readonly bot: any;
-  private readonly weatherService: WeatherService;
   // private readonly bot:TelegramBot // works after installing types
   private logger = new Logger(TelegramBotService.name);
 
@@ -56,6 +54,8 @@ export class TelegramBotService {
     const city = match[1];
 
     try {
+      const saveUserResp = await axios.post(SAVE_USER_URL, { chatId, city });
+      // console.log('saveUserREsp', saveUserResp);
       const response = await axios.post(WEATHER_API_URL, { chatId, city });
       const weatherData = response.data;
       // console.log(weatherData);
