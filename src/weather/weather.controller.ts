@@ -18,12 +18,13 @@ export class WeatherController {
   @Post('subscribe')
   async subscribe(@Body() { chatId, city }): Promise<any> {
     try {
+      // console.log('i am here');
       const weather = await this.weatherService.getWeather(city, chatId);
 
       return weather;
     } catch (error) {
       throw new Error(
-        `Failed to fetch weather data for ${city}. Please try again later.`,
+        `Failed to fetch weather data for ${city}. Please try again later.Errored in controller`,
       );
     }
   }

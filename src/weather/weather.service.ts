@@ -58,7 +58,7 @@ export class WeatherService {
       return response.data;
     } catch (error) {
       throw new Error(
-        `Failed to fetch weather data for ${city}. Please try again later.`,
+        `Failed to fetch weather data for ${city}. Please try again later.Errored in service`,
       );
     }
   }
