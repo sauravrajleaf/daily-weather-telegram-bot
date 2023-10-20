@@ -6,20 +6,20 @@ import { WeatherModule } from './weather/weather.module';
 import { WeatherController } from './weather/weather.controller';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
-import { SchedulerService } from './scheduler/scheduler.service';
-import { ScheduleModule } from '@nestjs/schedule';
+// import { SchedulerService } from './scheduler/scheduler.service';
+// import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 
 @Global()
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
+    // ScheduleModule.forRoot(),
     TelegramBotModule,
     WeatherModule,
     DatabaseModule,
     UserModule,
   ],
   controllers: [WeatherController, AppController],
-  providers: [AppService, WeatherService, SchedulerService],
+  providers: [AppService, WeatherService],
 })
 export class AppModule {}
