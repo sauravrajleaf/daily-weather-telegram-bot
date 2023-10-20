@@ -11,7 +11,9 @@ interface MongooseModuleFactoryOptions {
 async function createMongooseConnection(): Promise<MongooseModuleFactoryOptions> {
   const uri = process.env.MONGO_URL;
   return mongoose
-    .connect(uri)
+    .connect(uri, {
+      maxPoolSize: 10,
+    })
     .then((connection) => {
       console.log(`MongoDB connected: ${connection.connection.host}`);
       return { uri };
