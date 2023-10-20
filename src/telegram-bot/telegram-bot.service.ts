@@ -52,7 +52,7 @@ export class TelegramBotService {
 
     try {
       await axios.post(SAVE_USER_URL, { chatId, city });
-      // await axios.post(WEATHER_API_URL, { chatId, city });
+      await axios.post(WEATHER_API_URL, { chatId, city });
     } catch (error) {
       this.bot.sendMessage(
         chatId,
