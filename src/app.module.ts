@@ -1,4 +1,4 @@
-import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TelegramBotModule } from './telegram-bot/telegram-bot.module';
 import { WeatherService } from './weather/weather.service';
@@ -17,12 +17,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     UserModule,
   ],
   controllers: [WeatherController],
-  providers: [SchedulerService],
+  providers: [AppService, WeatherService, SchedulerService],
 })
-export class AppModule {
-  constructor(private readonly schedulerService: SchedulerService) {}
-
-  onApplicationBootstrap() {
-    this.schedulerService.sendWeatherNotifications();
-  }
-}
+export class AppModule {}
