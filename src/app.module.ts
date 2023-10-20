@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { SchedulerService } from './scheduler/scheduler.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AppController } from './app.controller';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -16,7 +17,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     DatabaseModule,
     UserModule,
   ],
-  controllers: [WeatherController],
+  controllers: [WeatherController, AppController],
   providers: [AppService, WeatherService, SchedulerService],
 })
 export class AppModule {}
