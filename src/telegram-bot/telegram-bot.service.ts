@@ -6,7 +6,7 @@ require('dotenv').config();
 const axios = require('axios');
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
-const WEATHER_API_URL = `${process.env.URL}/weather/subscribe`; // Replace with your API endpoint
+const WEATHER_API_URL = `${process.env.URL}/weather/subscribe`;
 const SAVE_USER_URL = `${process.env.URL}/user/save`;
 @Injectable()
 export class TelegramBotService {
@@ -50,50 +50,18 @@ export class TelegramBotService {
   }
 
   sendMessageToUser = (userId: string, message: string) => {
-    this.bot.sendMessage(userId, message);
+    this.bot.sendMessage(userId, message, { parse_mode: 'HTML' });
   };
 
   async onSubscribe(msg: any, match: any) {
-    // console.log('i am here');
     const chatId = msg.chat.id;
     const city = match[1];
 
     try {
-      const saveUserResp = await axios.post(SAVE_USER_URL, { chatId, city });
-      // console.log('saveUserREsp', saveUserResp);
-      const response = await axios.post(WEATHER_API_URL, { chatId, city });
-      const weatherData = response.data;
-      // console.log(weatherData);
-      const cityMsg = weatherData.name;
-      const description = weatherData.weather[0].description;
-      const temperature = weatherData.main.temp;
-      const feelsLike = weatherData.main.feels_like;
-      const humidity = weatherData.main.humidity;
-      const pressure = weatherData.main.pressure;
-      const windSpeed = weatherData.wind.speed;
-      const visibility = weatherData.visibility;
-      const sunriseTimestamp = weatherData.sys.sunrise;
-      const sunsetTimestamp = weatherData.sys.sunset;
-
-      const sunriseTime = new Date(
-        sunriseTimestamp * 1000,
-      ).toLocaleTimeString();
-      const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString();
-
-      // console.log(weather);
-      const message = `
-      🌦️ Weather Update for ${cityMsg}:
-      - <b>Condition</b>: ${description}
-      - <b>Temperature</b>: ${this.kelvinToCelsius(temperature).toFixed(2)}°C
-      - <b>Feels Like</b>: ${this.kelvinToCelsius(feelsLike).toFixed(2)}°C
-      - <b>Humidity</b>: ${humidity}%
-      - <b>Pressure</b>: ${pressure} hPa
-      - <b>Wind Speed</b>: ${windSpeed} m/s
-      - <b>Visibility</b>: ${visibility} meters
-      - <b>Sunrise</b>: ${sunriseTime}
-      - <b>Sunset</b>: ${sunsetTime}
-      `;
-      this.bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
+      await Promise.all([
+        axios.post(SAVE_USER_URL, { chatId, city }),
+        axios.post(WEATHER_API_URL, { chatId, city }),
+      ]);
     } catch (error) {
       this.bot.sendMessage(
         chatId,

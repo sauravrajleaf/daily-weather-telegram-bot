@@ -1,11 +1,17 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { TelegramBotService } from 'src/telegram-bot/telegram-bot.service';
+import { WeatherService } from 'src/weather/weather.service';
+require('dotenv').config();
+const axios = require('axios');
+
+const GET_USER_URL = `${process.env.URL}/user/getUser`;
+
 @Injectable()
 export class SchedulerService {
   constructor(
-    @Inject(TelegramBotService)
     private readonly telegramService: TelegramBotService,
+    private readonly weatherService: WeatherService,
   ) {}
 
   //   In this cron expression:
@@ -15,19 +21,22 @@ export class SchedulerService {
   // * in the fourth field means every month.
   // * in the fifth field means every day of the week.
   // * in the sixth field means every second within the minute.
-  @Cron('0 9 * * * *') // This cron job runs every day at 9:00 AM
+  @Cron('*/30 * * * * *') // This cron job runs every day at 9:00 AM
   async sendWeatherNotifications() {
-    const chatId = '1013100688';
-    this.telegramService.sendMessageToUser(chatId, `Scheduler Activated`);
     //Steps
     //1. Get the list of subscribed users /user/getUsers
-    //2. Call the /weather/subscribe route to send the weather details'
+    //2. Loop the array of users and send scheduled weather notifications
+    // console.log('GET_USER_URL', GET_USER_URL);
+    const userList = await axios.get(GET_USER_URL);
+    const allUsers = userList.data;
 
-    // const subscribedUsers = await this.userService.getSubscribedUsers();
-    // for (const user of subscribedUsers) {
-    //   const weatherData = await this.weatherService.getWeather(user.city);
-    //   // Implement logic to send weather data as a notification to user.chatId
-    //   // You can use a messaging service like Telegram API to send messages to users.
-    // }
+    for (const user of allUsers) {
+      // console.log('user', user);
+      const sendWeatherDetails = await this.weatherService.getWeather(
+        user.city,
+        user.chatId,
+      );
+    }
+    return;
   }
 }

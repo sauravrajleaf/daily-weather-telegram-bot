@@ -14,15 +14,15 @@ export class UserService {
   ) {}
   async createUser(userDto: any): Promise<User> {
     try {
+      // console.log('userDto', userDto);
       const chatId = userDto.chatId;
       const city = userDto.city;
       const user = await this.userModel.findOne({ chatId }).exec();
-      const userId = user._id;
-      const currCity = user.city;
-      console.log(user);
 
       //check if user exists
       if (user) {
+        const userId = user._id;
+        const currCity = user.city;
         //check if user exists with the same city details
         if (user.city === userDto.city) {
           this.telegramService.sendMessageToUser(
@@ -45,9 +45,19 @@ export class UserService {
         }
       }
       const createdUser = new this.userModel(userDto);
-      return createdUser.save();
+      await createdUser.save();
+      this.telegramService.sendMessageToUser(
+        chatId,
+        `User subscribed for daily weather report for ${city}!`,
+      );
     } catch (error) {
       throw new Error('Subscribing Failed');
     }
+  }
+
+  async getAllUserList(): Promise<any> {
+    const allUsers = await this.userModel.find().exec();
+    // console.log('allUsers', allUsers);
+    return allUsers;
   }
 }
