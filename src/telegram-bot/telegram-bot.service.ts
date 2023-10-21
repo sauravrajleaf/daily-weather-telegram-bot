@@ -1,16 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-const TelegramBot = require('node-telegram-bot-api');
+import * as TelegramBot from 'node-telegram-bot-api';
 
 require('dotenv').config();
-const axios = require('axios');
-
+import axios from 'axios';
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const WEATHER_API_URL = `${process.env.URL}/weather/subscribe`;
 const SAVE_USER_URL = `${process.env.URL}/user/save`;
 @Injectable()
 export class TelegramBotService {
-  private readonly bot: any;
+  private readonly bot: TelegramBot;
   // private readonly bot:TelegramBot // works after installing types
   private logger = new Logger(TelegramBotService.name);
 
@@ -31,7 +30,7 @@ export class TelegramBotService {
     // Add more event handlers as needed
   }
 
-  onStart(msg: any) {
+  onStart(msg: TelegramBot.Message) {
     const chatId = msg.chat.id;
     const welcomeMessage = `Welcome to the WeatherBot! Type /subscribe <city> to get weather updates for a specific city.`;
     this.bot.sendMessage(chatId, welcomeMessage);
@@ -46,7 +45,7 @@ export class TelegramBotService {
     this.bot.sendMessage(userId, message, { parse_mode: 'HTML' });
   };
 
-  async onSubscribe(msg: any, match: any) {
+  async onSubscribe(msg: TelegramBot.Message, match: any) {
     const chatId = msg.chat.id;
     const city = match[1];
 
