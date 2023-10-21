@@ -21,7 +21,7 @@ export class SchedulerService {
   // * in the fourth field means every month.
   // * in the fifth field means every day of the week.
   // * in the sixth field means every second within the minute.
-  @Cron('0 */1 * * * *') // This cron job runs every day at 9:00 AM
+  @Cron('0 * * * *') // This cron job runs every hour
   async sendWeatherNotifications() {
     //Steps
     //1. Get the list of subscribed users /user/getUsers
