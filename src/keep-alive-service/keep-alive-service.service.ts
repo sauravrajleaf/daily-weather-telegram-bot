@@ -9,7 +9,7 @@ export class KeepAliveTaskService {
 
   constructor(private readonly telegramBotService: TelegramBotService) {}
 
-  @Cron('*/15 * * * * *')
+  @Cron('0 0-23/1 * * *')
   async sendKeepAliveMessage() {
     const chatId = '1013100688';
     const keepAliveMessage = 'Keep-Alive: Bot is active and running!';
