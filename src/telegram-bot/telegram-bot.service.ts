@@ -51,7 +51,42 @@ export class TelegramBotService {
 
     try {
       await axios.post(SAVE_USER_URL, { chatId, city });
-      await axios.post(WEATHER_API_URL, { chatId, city });
+      const weather = await axios.post(WEATHER_API_URL, { chatId, city });
+
+      // const weatherData = weather.data;
+
+      // const cityMsg = weatherData.name;
+      // const description = weatherData.weather[0].description;
+      // const temperature = weatherData.main.temp;
+      // const feelsLike = weatherData.main.feels_like;
+      // const humidity = weatherData.main.humidity;
+      // const pressure = weatherData.main.pressure;
+      // const windSpeed = weatherData.wind.speed;
+      // const visibility = weatherData.visibility;
+      // const sunriseTimestamp = weatherData.sys.sunrise;
+      // const sunsetTimestamp = weatherData.sys.sunset;
+
+      // const sunriseTime = new Date(
+      //   sunriseTimestamp * 1000,
+      // ).toLocaleTimeString();
+      // const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString();
+
+      // const message = `
+      // 🌦️ Weather Update for ${cityMsg}:
+      // - <b>Condition</b>: ${description}
+      // - <b>Temperature</b>: ${this.kelvinToCelsius(temperature).toFixed(2)}°C
+      // - <b>Feels Like</b>: ${this.kelvinToCelsius(feelsLike).toFixed(2)}°C
+      // - <b>Humidity</b>: ${humidity}%
+      // - <b>Pressure</b>: ${pressure} hPa
+      // - <b>Wind Speed</b>: ${windSpeed} m/s
+      // - <b>Visibility</b>: ${visibility} meters
+      // - <b>Sunrise</b>: ${sunriseTime}
+      // - <b>Sunset</b>: ${sunsetTime}
+      // `;
+
+      // this.bot.sendMessageToUser(chatId, message);
+      // console.log(weather.data);
+      return;
     } catch (error) {
       this.bot.sendMessage(
         chatId,

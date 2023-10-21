@@ -55,7 +55,7 @@ export class WeatherService {
 
       this.telegramService.sendMessageToUser(chatId, message);
 
-      return response.data;
+      return weather;
     } catch (error) {
       throw new Error(
         `Failed to fetch weather data for ${city}. Please try again later.Errored in service`,
