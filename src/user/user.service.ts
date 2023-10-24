@@ -12,15 +12,17 @@ export class UserService {
     @Inject(TelegramBotService)
     private readonly telegramService: TelegramBotService,
   ) {}
+
   async createUser(userDto: any): Promise<User> {
     try {
-      // console.log('userDto', userDto);
+      console.log('userDto', userDto);
       const chatId = userDto.chatId;
       const city = userDto.city;
       const user = await this.userModel.findOne({ chatId }).exec();
 
       //check if user exists
       if (user) {
+        console.log('User already exists');
         const userId = user._id;
         const currCity = user.city;
         //check if user exists with the same city details
@@ -44,6 +46,8 @@ export class UserService {
           return updatedUser;
         }
       }
+
+      console.log('New user register');
       const createdUser = new this.userModel(userDto);
       await createdUser.save();
       this.telegramService.sendMessageToUser(
@@ -59,5 +63,10 @@ export class UserService {
     const allUsers = await this.userModel.find().exec();
     // console.log('allUsers', allUsers);
     return allUsers;
+  }
+
+  async blockOrUpdateUser(userDto: any): Promise<User> {
+    console.log('I am blockOrUpdateUser');
+    return;
   }
 }
