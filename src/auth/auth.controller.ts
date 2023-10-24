@@ -58,7 +58,8 @@ export class AuthController {
       if (user) {
         console.log('i am in if');
         // Generate a redirect URL for successful authentication
-        const redirectUrl = 'http://localhost:4200/auth-resolver'; // Adjust the route as per your frontend structure
+        const redirectUrl =
+          'https://admin-panel-telegram-bot.onrender.com/auth-resolver'; // Adjust the route as per your frontend structure
         res.redirect(redirectUrl);
         return;
       }
