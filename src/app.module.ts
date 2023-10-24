@@ -9,6 +9,9 @@ import { UserModule } from './user/user.module';
 import { SchedulerService } from './scheduler/scheduler.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+// import { GoogleStrategy } from './auth/google.strategy';
 
 @Global()
 @Module({
@@ -18,6 +21,8 @@ import { AppController } from './app.controller';
     WeatherModule,
     DatabaseModule,
     UserModule,
+    ConfigModule.forRoot(),
+    AuthModule,
   ],
   controllers: [WeatherController, AppController],
   providers: [AppService, WeatherService, SchedulerService],
