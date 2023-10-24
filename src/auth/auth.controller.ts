@@ -11,10 +11,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 const { OAuth2Client } = require('google-auth-library');
 import { ConfigService } from '@nestjs/config';
+import { Redirect } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly configService: ConfigService) {}
+  private authenticatedUsers: any[] = [];
   // @Get('google')
   // @UseGuards(AuthGuard('google'))
   // googleAuth() {
@@ -33,9 +35,13 @@ export class AuthController {
   //   };
   // }
   @Post('login')
-  async handleLogin(@Body('credential') idToken: string): Promise<string> {
+  async handleLogin(
+    @Body('credential') idToken: string,
+    @Res() res: Response,
+  ): Promise<{ redirectUrl: string } | null> {
     const client = new OAuth2Client();
     console.log('token', idToken);
+    this.authenticatedUsers = [];
 
     try {
       const ticket = await client.verifyIdToken({
@@ -45,12 +51,30 @@ export class AuthController {
 
       const user = ticket.payload;
 
-      console.log('ticket', ticket);
+      console.log('ticket', user);
+      // Store the authenticated user in the backend state
+      this.authenticatedUsers.push(user);
 
-      return user;
+      if (user) {
+        console.log('i am in if');
+        // Generate a redirect URL for successful authentication
+        const redirectUrl = 'http://localhost:4200/auth-resolver'; // Adjust the route as per your frontend structure
+        res.redirect(redirectUrl);
+        return;
+      }
+
+      // return user;
     } catch (error) {
       console.error('ID token verification error:', error.message);
-      throw new Error('Invalid ID token');
+      return null; // Return null if authentication fails
     }
+  }
+
+  // New route to send authenticated users back to the frontend
+  @Get('authenticated-user')
+  getAuthenticatedUsers(): any[] {
+    console.log('I am in authenticated-user');
+    console.log(this.authenticatedUsers);
+    return this.authenticatedUsers;
   }
 }
