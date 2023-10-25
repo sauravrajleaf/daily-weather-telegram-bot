@@ -35,10 +35,12 @@ export class WeatherService {
       const sunriseTimestamp = weather.sys.sunrise;
       const sunsetTimestamp = weather.sys.sunset;
 
-      const sunriseTime = new Date(
-        sunriseTimestamp * 1000,
-      ).toLocaleTimeString();
-      const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString();
+      const sunriseTime = new Date(sunriseTimestamp * 1000).toLocaleTimeString(
+        'en-IN',
+      );
+      const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString(
+        'en-IN',
+      );
 
       const message = `🌦️ **Weather Update for ${cityMsg}:**
       - 🌧️<b>Condition</b>: ${description}
