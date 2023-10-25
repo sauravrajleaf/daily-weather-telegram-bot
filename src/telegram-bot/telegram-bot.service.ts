@@ -48,7 +48,7 @@ export class TelegramBotService {
     WeatherBot is here to make your day brighter (or rainier, depending on the forecast)! Feel free to explore and enjoy your weather journey with us. If you have any questions, simply type /help.
     
     Happy weather watching! ☔️🌞`;
-    this.sendMessageToUser(chatId, welcomeMessage);
+    this.bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'HTML' });
   }
 
   // Function to convert temperature from Kelvin to Celsius
