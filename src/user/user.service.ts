@@ -69,4 +69,29 @@ export class UserService {
     console.log('I am blockOrUpdateUser');
     return;
   }
+
+  async unsubscribeUser({ chatId }): Promise<User> {
+    this.telegramService.sendMessageToUser(chatId, 'Unsubscribing user');
+
+    try {
+      // Find the user in the database
+      const user = await this.userModel.findOne({ chatId });
+
+      if (user) {
+        // If user found, delete the user from the database
+        await this.userModel.findOneAndDelete({ chatId });
+        this.telegramService.sendMessageToUser(
+          chatId,
+          'User unsubscribed successfully',
+        );
+        return user;
+      } else {
+        this.telegramService.sendMessageToUser(chatId, 'User not found');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error unsubscribing user:', error);
+      throw error;
+    }
+  }
 }

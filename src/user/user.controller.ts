@@ -37,6 +37,18 @@ export class UserController {
     }
   }
 
+  @Post('unsubscribe')
+  async unsubscribeUser(@Body() { chatId }): Promise<object> {
+    try {
+      // console.log(chatId, city);
+      //call the service which interacts with the database to save the user
+      const user = await this.userService.unsubscribeUser({ chatId });
+      return user;
+    } catch (error) {
+      throw new Error('Subscribing Failed');
+    }
+  }
+
   @Get('getUser')
   async getAllUsers(): Promise<any> {
     const users = await this.userService.getAllUserList();
