@@ -32,8 +32,23 @@ export class TelegramBotService {
 
   onStart(msg: TelegramBot.Message) {
     const chatId = msg.chat.id;
-    const welcomeMessage = `Welcome to the WeatherBot! Type /subscribe <city> to get weather updates for a specific city.`;
-    this.bot.sendMessage(chatId, welcomeMessage);
+    const welcomeMessage = `🌤️ Welcome to WeatherBot!
+
+    Excited to have you on board! Here's everything you need to know about our WeatherBot:
+    
+    About the Bot:
+    WeatherBot is your friendly neighborhood weather companion! 🌍 Get ready to receive daily weather notifications delivered right to your doorstep every day at 6 am sharp! Whether you're planning a day out or just curious about the weather in your area, WeatherBot has got you covered.
+    
+    How to Get Started:
+    
+    Subscribe: To start receiving your daily weather updates, simply type /subscribe <cityname>. For example, /subscribe Bangalore. 🏙️
+    Update City: Have a change of plans? No worries! Update your subscribed city anytime by typing /subscribe <newcityname>.
+    Live Updates: Need real-time weather info? Just type /weather <cityname> to get the latest updates instantly. 🌦️
+    Pin for Future: Don't forget to pin this message in the chat for quick reference! 📌
+    WeatherBot is here to make your day brighter (or rainier, depending on the forecast)! Feel free to explore and enjoy your weather journey with us. If you have any questions, simply type /help.
+    
+    Happy weather watching! ☔️🌞`;
+    this.sendMessageToUser(chatId, welcomeMessage);
   }
 
   // Function to convert temperature from Kelvin to Celsius
