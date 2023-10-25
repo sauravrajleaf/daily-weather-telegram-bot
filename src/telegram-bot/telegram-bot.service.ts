@@ -28,33 +28,34 @@ export class TelegramBotService {
     this.bot.onText(/\/subscribe (.+)/, (msg, match) =>
       this.onSubscribe(msg, match),
     );
-    this.bot.onText(/\/unsubscribe (.+)/, (msg) => this.onUnsubscribe(msg));
+    this.bot.onText(/\/unsubscribe/, (msg) => this.onUnsubscribe(msg));
     // Add more event handlers as needed
   }
 
   onStart(msg: TelegramBot.Message) {
     const chatId = msg.chat.id;
-    const welcomeMessage = `🌦️ Welcome to WeatherBot! 🌈
+    const welcomeMessage = `🌦️ <b>Welcome to WeatherBot!</b> 🌈
 
     Excited to have you on board! Here's a quick guide to our WeatherBot:
     
-    About WeatherBot:
+    <b>About WeatherBot:</b>
     Your friendly neighborhood weather companion! 🌍 Get daily weather notifications at 6 am sharp! Whether you're planning a day out or curious about local weather, WeatherBot's got you covered.
     
-    How to Start:
-    - Subscribe: Type /subscribe <cityname> to receive daily updates. E.g., /subscribe Bangalore. 🏙️
-    - Update City: Change your subscribed city anytime with /subscribe <newcityname>.
-    - Live Updates: For real-time weather, type /subscribe <cityname>. 🌦️
-    - Pin for Future: Pin this message for quick reference! 📌
+    <b>How to Start:</b>
+    - <b>Subscribe</b>: Type /subscribe cityname to receive daily updates. E.g., /subscribe Bangalore. 🏙️
+    - <b>Update City:</b> Change your subscribed city anytime with /subscribe newcityname.
+    - <b>Live Updates:</b> For real-time weather, type /subscribe cityname. 🌦️
+    - <b>To Unsubscribe:</b> For unsubscribing, type /unsubscribe. 😢
+    - <b>Pin for Future:</b> Pin this message for quick reference! 📌
     
-    Enjoy your weather journey! If you have questions, type /help.
+    Enjoy your weather journey! If you have questions, contact admin.
     
-    🚀 Coming Soon:
-    1. Unsubscribe Feature: 🚫
-    Manage subscriptions effortlessly. Stay tuned for updates! For now, contact our friendly admin to unsubscribe. Thanks for your patience! 🌟
+    🚀 <b>Coming Soon:</b>
+    1. <b>Menu Options: </b> 🚫
+    Manage commands effortlessly. Stay tuned for updates! For now, contact our friendly admin to unsubscribe. Thanks for your patience! 🌟
     
-    Happy weather watching! ☔️🌞`;
-    this.bot.sendMessage(chatId, welcomeMessage);
+    <b>Happy weather watching!</b> ☔️🌞`;
+    this.bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'HTML' });
   }
 
   // Function to convert temperature from Kelvin to Celsius
@@ -63,26 +64,42 @@ export class TelegramBotService {
   }
 
   sendMessageToUser = (userId: string, message: string) => {
+    // console.log(userId, message);
     this.bot.sendMessage(userId, message, { parse_mode: 'HTML' });
   };
 
   async onSubscribe(msg: TelegramBot.Message, match: any) {
-    const chatId = msg.chat.id;
+    // const chatId = msg.chat.id;
+    const { id, first_name, last_name, username } = msg.chat;
     const city = match[1];
-
+    // console.log('match', msg);
+    // console.log(
+    //   'chatId, first_name, last_name, username',
+    //   id,
+    //   first_name,
+    //   last_name,
+    //   username,
+    // );
     try {
-      await axios.post(SAVE_USER_URL, { chatId, city });
-      const weather = await axios.post(WEATHER_API_URL, { chatId, city });
+      await axios.post(SAVE_USER_URL, {
+        chatId: id,
+        city,
+        firstName: first_name,
+        lastName: last_name,
+        UserName: username,
+      });
+      const weather = await axios.post(WEATHER_API_URL, { chatId: id, city });
       return;
     } catch (error) {
       this.bot.sendMessage(
-        chatId,
+        id,
         `Failed to fetch weather data for ${city}. Please try again later.`,
       );
     }
   }
 
   async onUnsubscribe(msg: TelegramBot.Message) {
+    console.log('I am here in onUnsubscribe telegram service');
     const chatId = msg.chat.id;
 
     try {

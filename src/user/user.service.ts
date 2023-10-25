@@ -14,10 +14,12 @@ export class UserService {
   ) {}
 
   async createUser(userDto: any): Promise<User> {
+    const { chatId, city } = userDto;
     try {
       console.log('userDto', userDto);
-      const chatId = userDto.chatId;
-      const city = userDto.city;
+
+      // const chatId = userDto.chatId;
+      // const city = userDto.city;
       const user = await this.userModel.findOne({ chatId }).exec();
 
       //check if user exists
@@ -26,10 +28,11 @@ export class UserService {
         const userId = user._id;
         const currCity = user.city;
         //check if user exists with the same city details
+        // console.log('iddddddddddd', chatId);
         if (user.city === userDto.city) {
           this.telegramService.sendMessageToUser(
             chatId,
-            'User already subscribed with same city!',
+            `Hey ${user.firstName}👋, you are already subscribed to weather updates for ${city}👍! If you need any further assistance, feel free to contact admin. Happy weather watching! 🌦️🌈`,
           );
           return user;
         } else {
@@ -41,7 +44,7 @@ export class UserService {
           );
           this.telegramService.sendMessageToUser(
             chatId,
-            `User already subscribed! City Updated form ${currCity} ✈️ ${city}`,
+            `Hey ${user.firstName}👋, You are already subscribed! City Updated form ${currCity} ✈️ ${city}`,
           );
           return updatedUser;
         }
@@ -50,10 +53,12 @@ export class UserService {
       console.log('New user register');
       const createdUser = new this.userModel(userDto);
       await createdUser.save();
+      // console.log('idddddddddd', chatId);
       this.telegramService.sendMessageToUser(
         chatId,
-        `User subscribed for daily weather report for ${city}!`,
+        `🌟 Welcome aboard ${userDto.firstName}! 🌦️ Enjoy daily weather updates for ${city}! 🎉`,
       );
+      return user;
     } catch (error) {
       throw new Error('Subscribing Failed');
     }
@@ -71,7 +76,9 @@ export class UserService {
   }
 
   async unsubscribeUser({ chatId }): Promise<User> {
-    this.telegramService.sendMessageToUser(chatId, 'Unsubscribing user');
+    console.log('I am here in onUnsubscribe user service');
+
+    this.telegramService.sendMessageToUser(chatId, '👋 Unsubscribing... 😢');
 
     try {
       // Find the user in the database
@@ -82,7 +89,7 @@ export class UserService {
         await this.userModel.findOneAndDelete({ chatId });
         this.telegramService.sendMessageToUser(
           chatId,
-          'User unsubscribed successfully',
+          `Hey ${user.firstName}, services are successfully unsubscribed👋`,
         );
         return user;
       } else {

@@ -9,7 +9,8 @@ export class UserController {
   //handle new registration and also check if the user already exists
   @Post('save')
   async subscribe(
-    @Body() { chatId, city, isBlocked = false },
+    @Body()
+    { chatId, city, isBlocked = false, firstName, lastName, UserName },
   ): Promise<object> {
     try {
       // console.log(chatId, city);
@@ -18,6 +19,9 @@ export class UserController {
         chatId,
         city,
         isBlocked,
+        firstName,
+        lastName,
+        UserName,
       });
       return user;
     } catch (error) {
@@ -40,6 +44,7 @@ export class UserController {
   @Post('unsubscribe')
   async unsubscribeUser(@Body() { chatId }): Promise<object> {
     try {
+      console.log('I am here in onUnsubscribe user controller');
       // console.log(chatId, city);
       //call the service which interacts with the database to save the user
       const user = await this.userService.unsubscribeUser({ chatId });
