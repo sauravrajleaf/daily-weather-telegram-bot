@@ -32,23 +32,27 @@ export class TelegramBotService {
 
   onStart(msg: TelegramBot.Message) {
     const chatId = msg.chat.id;
-    const welcomeMessage = `🌤️ Welcome to WeatherBot!
+    const welcomeMessage = `🌦️ Welcome to WeatherBot! 🌈
 
-    Excited to have you on board! Here's everything you need to know about our WeatherBot:
+    Excited to have you on board! Here's a quick guide to our WeatherBot:
     
-    About the Bot:
-    WeatherBot is your friendly neighborhood weather companion! 🌍 Get ready to receive daily weather notifications delivered right to your doorstep every day at 6 am sharp! Whether you're planning a day out or just curious about the weather in your area, WeatherBot has got you covered.
+    About WeatherBot:
+    Your friendly neighborhood weather companion! 🌍 Get daily weather notifications at 6 am sharp! Whether you're planning a day out or curious about local weather, WeatherBot's got you covered.
     
-    How to Get Started:
+    How to Start:
+    - Subscribe: Type /subscribe <cityname> to receive daily updates. E.g., /subscribe Bangalore. 🏙️
+    - Update City: Change your subscribed city anytime with /subscribe <newcityname>.
+    - Live Updates: For real-time weather, type /subscribe <cityname>. 🌦️
+    - Pin for Future: Pin this message for quick reference! 📌
     
-    Subscribe: To start receiving your daily weather updates, simply type /subscribe <cityname>. For example, /subscribe Bangalore. 🏙️
-    Update City: Have a change of plans? No worries! Update your subscribed city anytime by typing /subscribe <newcityname>.
-    Live Updates: Need real-time weather info? Just type /weather <cityname> to get the latest updates instantly. 🌦️
-    Pin for Future: Don't forget to pin this message in the chat for quick reference! 📌
-    WeatherBot is here to make your day brighter (or rainier, depending on the forecast)! Feel free to explore and enjoy your weather journey with us. If you have any questions, simply type /help.
+    Enjoy your weather journey! If you have questions, type /help.
+    
+    🚀 Coming Soon:
+    1. Unsubscribe Feature: 🚫
+    Manage subscriptions effortlessly. Stay tuned for updates! For now, contact our friendly admin to unsubscribe. Thanks for your patience! 🌟
     
     Happy weather watching! ☔️🌞`;
-    this.bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'HTML' });
+    this.bot.sendMessage(chatId, welcomeMessage);
   }
 
   // Function to convert temperature from Kelvin to Celsius

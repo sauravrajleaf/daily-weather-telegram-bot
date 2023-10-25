@@ -40,18 +40,16 @@ export class WeatherService {
       ).toLocaleTimeString();
       const sunsetTime = new Date(sunsetTimestamp * 1000).toLocaleTimeString();
 
-      const message = `
-      🌦️ Weather Update for ${cityMsg}:
-      - <b>Condition</b>: ${description}
-      - <b>Temperature</b>: ${this.kelvinToCelsius(temperature).toFixed(2)}°C
-      - <b>Feels Like</b>: ${this.kelvinToCelsius(feelsLike).toFixed(2)}°C
-      - <b>Humidity</b>: ${humidity}%
-      - <b>Pressure</b>: ${pressure} hPa
-      - <b>Wind Speed</b>: ${windSpeed} m/s
-      - <b>Visibility</b>: ${visibility} meters
-      - <b>Sunrise</b>: ${sunriseTime}
-      - <b>Sunset</b>: ${sunsetTime}
-      `;
+      const message = `🌦️ **Weather Update for ${cityMsg}:**
+      - 🌧️<b>Condition</b>: ${description}
+      - 🌡️<b>Temperature</b>: ${this.kelvinToCelsius(temperature).toFixed(2)}°C
+      -  🌬️<b>Feels Like</b>: ${this.kelvinToCelsius(feelsLike).toFixed(2)}°C
+      -  💧<b>Humidity</b>: ${humidity}%
+      -  🏔️<b>Pressure</b>: ${pressure} hPa
+      -  🌪️<b>Wind Speed</b>: ${windSpeed} m/s
+      -  👀<b>Visibility</b>: ${visibility} meters
+      -  🌅<b>Sunrise</b>: ${sunriseTime}
+      -  🌇<b>Sunset</b>: ${sunsetTime}`;
 
       this.telegramService.sendMessageToUser(chatId, message);
 
