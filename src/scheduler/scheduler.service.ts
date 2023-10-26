@@ -21,7 +21,7 @@ export class SchedulerService {
   // * in the fourth field means every month.
   // * in the fifth field means every day of the week.
   // * in the sixth field means every second within the minute.
-  @Cron('0 6 * * *') // This cron job runs every hour
+  @Cron('0 0 * * *') // This cron job at 6 am every morning
   async sendWeatherNotifications() {
     //Steps
     //1. Get the list of subscribed users /user/getUsers
@@ -31,7 +31,7 @@ export class SchedulerService {
     const allUsers = userList.data;
 
     for (const user of allUsers) {
-      // console.log('user', user);
+      console.log('user', user);
       const sendWeatherDetails = await this.weatherService.getWeather(
         user.city,
         user.chatId,
